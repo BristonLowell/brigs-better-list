@@ -1,22 +1,22 @@
 import { ProxyState } from "../AppState.js"
-import {carsService} from "../Services/CarsService.js"
+import { carsService } from "../Services/CarsService.js"
 
-function _draw(){
+function _draw() {
   let cars = ProxyState.cars
   let template = ""
-  cars.forEach(c=> template += c.Template)
+  cars.forEach(c => template += c.Template)
   document.getElementById("cars").innerHTML = template
 }
 
-export default class CarsController{
-  constructor(){
+export default class CarsController {
+  constructor() {
     console.log("cars controller")
     console.log(ProxyState.cars)
     _draw()
     ProxyState.on("cars", _draw)
   }
 
-  createCar(){
+  createCar() {
     event.preventDefault();
     console.log("car creating")
     let form = event.target
@@ -39,11 +39,11 @@ export default class CarsController{
     carsService.createCar(rawCar)
   }
 
-  delete(id){
+  delete(id) {
     carsService.removeCar(id)
   }
 
-  bid(id){
+  bid(id) {
     event.preventDefault();
     let form = event.target
     // @ts-ignore
@@ -51,5 +51,20 @@ export default class CarsController{
     // @ts-ignore
     let bid = form.bid.value
     carsService.bid(id, bid)
+  }
+
+  pageChange(headerName) {
+    document.getElementById(headerName).classList.remove("hidden")
+    document.getElementById("main-header").classList.add("hidden")
+    if (headerName == "cars-header") {
+      document.getElementById("car-form").classList.remove("hidden")
+    }
+    if (headerName == "jobs-header") {
+      document.getElementById("job-form").classList.remove("hidden")
+    }
+    if (headerName == "houses-header") {
+      document.getElementById("house-form").classList.remove("hidden")
+    }
+    carsService.pageChange(headerName)
   }
 }
